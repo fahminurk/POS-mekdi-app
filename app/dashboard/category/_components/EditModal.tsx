@@ -19,23 +19,20 @@ import {
 } from "~/components/ui/dialog";
 import { Input } from "~/components/ui/input";
 import { useUpdateCategoryMutation } from "~/actions/useCategory";
-
-const createCategorySchema = z.object({
-  name: z.string().min(1, { message: "Name is required" }),
-});
+import { categorySchema } from "~/lib/utils";
 
 const EditModal: React.FC<{ name: string; id: string }> = ({ name, id }) => {
   const [open, setOpen] = useState(false);
   const { mutateAsync, isPending } = useUpdateCategoryMutation();
 
-  const form = useForm<z.infer<typeof createCategorySchema>>({
-    resolver: zodResolver(createCategorySchema),
+  const form = useForm<z.infer<typeof categorySchema>>({
+    resolver: zodResolver(categorySchema),
     defaultValues: {
       name,
     },
   });
 
-  async function onSubmit(values: z.infer<typeof createCategorySchema>) {
+  async function onSubmit(values: z.infer<typeof categorySchema>) {
     try {
       await mutateAsync({ id, ...values });
       setOpen(false);

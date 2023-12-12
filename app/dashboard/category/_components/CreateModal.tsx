@@ -19,23 +19,20 @@ import {
 } from "~/components/ui/dialog";
 import { Input } from "~/components/ui/input";
 import { useCreateCategoryMutation } from "~/actions/useCategory";
-
-const createCategorySchema = z.object({
-  name: z.string().min(1, { message: "Name is required" }),
-});
+import { categorySchema } from "~/lib/utils";
 
 const CreateModal = () => {
   const [open, setOpen] = useState(false);
   const { mutateAsync, isPending } = useCreateCategoryMutation();
 
-  const form = useForm<z.infer<typeof createCategorySchema>>({
-    resolver: zodResolver(createCategorySchema),
+  const form = useForm<z.infer<typeof categorySchema>>({
+    resolver: zodResolver(categorySchema),
     defaultValues: {
       name: "",
     },
   });
 
-  async function onSubmit(values: z.infer<typeof createCategorySchema>) {
+  async function onSubmit(values: z.infer<typeof categorySchema>) {
     try {
       await mutateAsync(values);
       setOpen(false);
@@ -54,7 +51,7 @@ const CreateModal = () => {
             Create Category
           </DialogTitle>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <FormField
                 control={form.control}
                 name="name"
@@ -69,7 +66,7 @@ const CreateModal = () => {
                 )}
               />
               <div className="flex justify-end">
-                <Button type="submit" disabled={isPending}>
+                <Button type="submit" variant={"outline"} disabled={isPending}>
                   Submit
                 </Button>
               </div>
