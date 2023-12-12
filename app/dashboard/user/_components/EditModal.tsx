@@ -18,42 +18,46 @@ import {
   DialogTitle,
 } from "~/components/ui/dialog";
 import { Input } from "~/components/ui/input";
-import { useCreateUserMutation } from "~/actions/useUser";
 import { Checkbox } from "~/components/ui/checkbox";
+
+import { useUpdateUserMutation } from "~/actions/useUser";
 import { userSchema } from "~/lib/utils";
 
-const CreateUserModal = () => {
+const EditModal: React.FC<{
+  name: string;
+  id: string;
+  email: string;
+  isSuperAdmin: boolean;
+}> = ({ name, id, email, isSuperAdmin }) => {
   const [open, setOpen] = useState(false);
-  const { mutateAsync, isPending } = useCreateUserMutation();
+  const { mutateAsync, isPending } = useUpdateUserMutation();
 
   const form = useForm<z.infer<typeof userSchema>>({
     resolver: zodResolver(userSchema),
     defaultValues: {
-      name: "",
-      email: "",
-      password: "",
-      isSuperAdmin: false,
+      name,
+      email,
+      isSuperAdmin,
     },
   });
 
   async function onSubmit(values: z.infer<typeof userSchema>) {
     try {
-      await mutateAsync(values);
+      await mutateAsync({ id, ...values });
       setOpen(false);
-      form.reset();
     } catch (error) {
       console.log(error);
     }
   }
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <Button variant={"outline"} onClick={() => setOpen(!open)}>
-        Add
+      <Button size={"sm"} variant={"outline"} onClick={() => setOpen(!open)}>
+        Edit
       </Button>
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="mb-5 text-xl font-bold">
-            Create User
+            Edit User
           </DialogTitle>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
@@ -85,23 +89,6 @@ const CreateUserModal = () => {
               />
               <FormField
                 control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>password</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="password"
-                        type="password"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
                 name="isSuperAdmin"
                 render={({ field }) => (
                   <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
@@ -117,7 +104,6 @@ const CreateUserModal = () => {
                   </FormItem>
                 )}
               />
-
               <div className="flex justify-end">
                 <Button type="submit" disabled={isPending}>
                   Submit
@@ -131,4 +117,4 @@ const CreateUserModal = () => {
   );
 };
 
-export default CreateUserModal;
+export default EditModal;
