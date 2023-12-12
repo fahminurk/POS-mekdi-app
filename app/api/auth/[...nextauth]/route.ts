@@ -52,6 +52,7 @@ export const authOptions: AuthOptions = {
     },
     async session({ session, token }) {
       session.user.isSuperAdmin = token.isSuperAdmin as boolean;
+      session.user.id = token.sub as string;
       // console.log(session);
       // console.log(token);
 
