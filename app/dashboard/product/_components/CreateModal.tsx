@@ -53,6 +53,8 @@ const CreateModal = () => {
     try {
       if (!imgUrl) return toast.error("Please select an image");
       await mutateAsync({ ...values, imgUrl });
+      form.reset();
+      setImgUrl("");
       setOpen(false);
     } catch (error) {
       console.log(error);

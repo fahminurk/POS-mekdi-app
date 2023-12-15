@@ -5,11 +5,22 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { Category, User } from "@prisma/client";
+import { Product } from "@prisma/client";
 import axios from "axios";
 
-export const useCategoryQuery = (): UseQueryResult<Category[], Error> => {
-  return useQuery<Category[], Error>({
+export type CategoryWithProduct = {
+  id: string;
+  name: string;
+  createdAt: Date;
+  updatedAt: Date;
+  products: Product[];
+};
+
+export const useCategoryQuery = (): UseQueryResult<
+  CategoryWithProduct[],
+  Error
+> => {
+  return useQuery<CategoryWithProduct[], Error>({
     queryKey: ["categories"],
     queryFn: () => axios.get("/api/category").then((res) => res.data),
   });

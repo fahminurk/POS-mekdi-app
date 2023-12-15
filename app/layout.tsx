@@ -4,6 +4,7 @@ import "./globals.css";
 import AuthProvider from "~/provider/SessionProvider";
 import { Toaster } from "sonner";
 import QueryProvider from "~/provider/QueryProvider";
+import Orderbar from "~/components/OrderBar";
 
 const inter = Poppins({ subsets: ["latin"], weight: ["400", "700"] });
 
@@ -22,7 +23,9 @@ export default function RootLayout({
       <body className={inter.className}>
         <Toaster />
         <AuthProvider>
-          <QueryProvider>{children}</QueryProvider>
+          <QueryProvider>
+            <main>{children}</main>
+          </QueryProvider>
         </AuthProvider>
       </body>
     </html>

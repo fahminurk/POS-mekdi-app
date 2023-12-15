@@ -74,7 +74,7 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
           </div>
         </div>
       </div>
-      <main className="h-full flex-1 overflow-y-auto">{children}</main>
+      <div className="h-full flex-1 overflow-y-auto">{children}</div>
     </div>
   );
 };
